@@ -38,11 +38,12 @@ export function WhatsAppChat({
       <AnimatePresence>
         {isOpen && (
           <motion.div
-            initial={{ opacity: 0, scale: 0.8, y: 20 }}
+            initial={{ opacity: 0, scale: 0.95, y: 16 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.8, y: 20 }}
-            transition={{ duration: 0.3, ease: "easeOut" }}
-            className="w-80 max-w-[calc(100vw-3rem)] bg-white rounded-2xl shadow-2xl border border-gray-200 overflow-hidden"
+            exit={{ opacity: 0, scale: 0.95, y: 16 }}
+            transition={{ duration: 0.25, ease: [0.25, 0.46, 0.45, 0.94] }}
+            className="w-80 max-w-[calc(100vw-3rem)] bg-white rounded-2xl shadow-xl border border-gray-200 overflow-hidden"
+            style={{ willChange: 'transform, opacity' }}
           >
             {/* Header */}
             <div className="bg-green-500 text-white p-4 flex items-center justify-between">
@@ -98,29 +99,30 @@ export function WhatsAppChat({
 
       {/* Floating WhatsApp Button */}
       <motion.button
-        whileHover={{ scale: 1.1 }}
-        whileTap={{ scale: 0.95 }}
+        whileHover={{ scale: 1.05 }}
+        whileTap={{ scale: 0.98 }}
         onClick={() => setIsOpen(!isOpen)}
-        className="w-14 h-14 bg-green-500 hover:bg-green-600 text-white rounded-full shadow-lg flex items-center justify-center transition-all shadow-green-500/25 hover:shadow-green-500/40"
+        className="w-14 h-14 bg-green-500 hover:bg-green-600 text-white rounded-full shadow-lg flex items-center justify-center transition-colors duration-200 shadow-green-500/25 hover:shadow-green-500/40"
+        style={{ willChange: 'transform' }}
       >
         <AnimatePresence mode="wait">
           {isOpen ? (
             <motion.div
               key="close"
-              initial={{ rotate: -180, opacity: 0 }}
+              initial={{ rotate: -90, opacity: 0 }}
               animate={{ rotate: 0, opacity: 1 }}
-              exit={{ rotate: 180, opacity: 0 }}
-              transition={{ duration: 0.2 }}
+              exit={{ rotate: 90, opacity: 0 }}
+              transition={{ duration: 0.15, ease: [0.25, 0.46, 0.45, 0.94] }}
             >
               <X size={24} />
             </motion.div>
           ) : (
             <motion.div
               key="whatsapp"
-              initial={{ rotate: 180, opacity: 0 }}
+              initial={{ rotate: 90, opacity: 0 }}
               animate={{ rotate: 0, opacity: 1 }}
-              exit={{ rotate: -180, opacity: 0 }}
-              transition={{ duration: 0.2 }}
+              exit={{ rotate: -90, opacity: 0 }}
+              transition={{ duration: 0.15, ease: [0.25, 0.46, 0.45, 0.94] }}
             >
               <MessageCircle size={24} />
             </motion.div>
@@ -133,7 +135,9 @@ export function WhatsAppChat({
         <motion.div
           initial={{ scale: 0 }}
           animate={{ scale: 1 }}
+          transition={{ duration: 0.2, ease: [0.25, 0.46, 0.45, 0.94] }}
           className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full"
+          style={{ willChange: 'transform' }}
         />
       )}
     </div>

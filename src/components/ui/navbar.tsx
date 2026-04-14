@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Menu, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -7,10 +7,17 @@ export function Navbar() {
   const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
+    let ticking = false;
     const handleScroll = () => {
-      setScrolled(window.scrollY > 20);
+      if (!ticking) {
+        requestAnimationFrame(() => {
+          setScrolled(window.scrollY > 20);
+          ticking = false;
+        });
+        ticking = true;
+      }
     };
-    window.addEventListener('scroll', handleScroll);
+    window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
@@ -18,10 +25,11 @@ export function Navbar() {
     <motion.nav 
       initial={{ y: -100, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
-      transition={{ duration: 0.8, ease: "easeOut" }}
-      className={`fixed top-4 md:top-6 left-1/2 -translate-x-1/2 z-50 w-[95%] max-w-6xl transition-all duration-500 ${scrolled ? 'top-2 md:top-4' : ''}`}
+      transition={{ duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }}
+      className={`fixed top-4 md:top-6 left-1/2 -translate-x-1/2 z-50 w-[95%] max-w-6xl transition-transform duration-300 ease-out will-change-transform ${scrolled ? 'top-2 md:top-4' : ''}`}
+      style={{ willChange: 'transform' }}
     >
-      <div className="flex items-center justify-between px-4 md:px-6 py-3 md:py-4 rounded-full bg-black/40 border border-white/10 backdrop-blur-xl shadow-2xl shadow-black/50">
+      <div className="flex items-center justify-between px-4 md:px-6 py-3 md:py-4 rounded-full bg-black/40 border border-white/10 backdrop-blur-xl shadow-xl shadow-black/30">
         {/* Left: Logo */}
         <div className="flex items-center gap-2 pl-2 md:pl-0">
           <div className="w-8 h-8 rounded-full bg-gradient-to-br from-white to-neutral-500 flex items-center justify-center">
@@ -36,13 +44,13 @@ export function Navbar() {
         <div className="flex items-center gap-2 md:gap-8">
           <div className="hidden md:flex items-center gap-8 text-sm font-medium text-neutral-400">
             {['Home', 'Features', 'About', 'Contact'].map((item) => (
-              <a key={item} href="#" className="relative hover:text-white transition-colors group">
+              <a key={item} href="#" className="relative hover:text-white transition-colors duration-200 group">
                 {item}
-                <span className="absolute -bottom-1 left-0 w-0 h-[2px] bg-white transition-all duration-300 group-hover:w-full rounded-full" />
+                <span className="absolute -bottom-1 left-0 w-0 h-[2px] bg-white transition-all duration-200 ease-out group-hover:w-full rounded-full" />
               </a>
             ))}
           </div>
-          <button className="hidden md:inline-flex items-center justify-center px-6 py-2.5 rounded-full bg-white text-black text-sm font-semibold hover:scale-105 transition-all shadow-[0_0_20px_rgba(255,255,255,0.1)] hover:shadow-[0_0_30px_rgba(255,255,255,0.3)]">
+          <button className="hidden md:inline-flex items-center justify-center px-6 py-2.5 rounded-full bg-white text-black text-sm font-semibold hover:scale-[1.02] transition-transform duration-200 shadow-lg hover:shadow-xl">
             Get Started
           </button>
           
@@ -60,29 +68,30 @@ export function Navbar() {
       <AnimatePresence>
         {isOpen && (
           <motion.div 
-            initial={{ opacity: 0, y: -10, scale: 0.95 }}
+            initial={{ opacity: 0, y: -10, scale: 0.98 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: -10, scale: 0.95 }}
-            transition={{ duration: 0.2 }}
-            className="md:hidden absolute top-full left-0 w-full mt-2 p-4 rounded-3xl bg-black/80 border border-white/10 backdrop-blur-2xl flex flex-col gap-2 shadow-2xl overflow-hidden"
+            exit={{ opacity: 0, y: -10, scale: 0.98 }}
+            transition={{ duration: 0.25, ease: [0.25, 0.46, 0.45, 0.94] }}
+            className="md:hidden absolute top-full left-0 w-full mt-2 p-4 rounded-3xl bg-black/80 border border-white/10 backdrop-blur-xl flex flex-col gap-2 shadow-xl overflow-hidden"
+            style={{ willChange: 'transform, opacity' }}
           >
             {['Home', 'Features', 'About', 'Contact'].map((item, i) => (
               <motion.a 
                 key={item}
-                initial={{ opacity: 0, x: -10 }}
+                initial={{ opacity: 0, x: -8 }}
                 animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: i * 0.1 }}
+                transition={{ delay: i * 0.05, duration: 0.2 }}
                 href="#" 
-                className="text-neutral-300 hover:text-white text-base font-medium transition-colors px-6 py-4 rounded-xl hover:bg-white/10"
+                className="text-neutral-300 hover:text-white text-base font-medium transition-colors duration-200 px-6 py-4 rounded-xl hover:bg-white/10"
               >
                 {item}
               </motion.a>
             ))}
             <motion.button 
-              initial={{ opacity: 0, y: 10 }}
+              initial={{ opacity: 0, y: 8 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.4 }}
-              className="mt-2 mx-2 px-6 py-4 rounded-xl bg-white text-black text-base font-semibold hover:bg-neutral-200 transition-colors"
+              transition={{ delay: 0.2, duration: 0.25 }}
+              className="mt-2 mx-2 px-6 py-4 rounded-xl bg-white text-black text-base font-semibold hover:bg-neutral-200 transition-colors duration-200"
             >
               Get Started
             </motion.button>
