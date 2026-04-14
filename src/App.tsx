@@ -7,7 +7,7 @@ import { SplineSceneBasic } from "@/components/ui/demo";
 import { Navbar } from "@/components/ui/navbar";
 import DemoOne from "@/components/ui/feature-demo";
 import { Footer } from "@/components/ui/footer-section";
-import { WhatsAppChat } from "@/components/ui/whatsapp-chat";
+import { AIHealthChat } from "@/components/ui/ai-health-chat";
 
 export default function App() {
   return (
@@ -32,8 +32,8 @@ export default function App() {
 
       <Footer />
       
-      {/* WhatsApp Chat Integration */}
-      <WhatsAppChat 
+      {/* AI Health Chat Integration */}
+      <AIHealthChat 
         position="bottom-right"
       />
     </div>
