@@ -106,11 +106,15 @@ Response:`;
     }
   };
 
-  const handleKeyPress = (e: React.KeyboardEvent) => {
+  const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
       handleSendMessage();
     }
+  };
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setInputText(e.target.value);
   };
 
   const formatTime = (date: Date) => {
@@ -209,21 +213,24 @@ Response:`;
             </div>
 
             {/* Input Area */}
-            <div className="p-4 bg-white border-t border-gray-200">
+            <div className="p-4 bg-white border-t border-gray-200 relative z-10">
               <div className="flex gap-2">
                 <input
+                  ref={(input) => input?.focus()}
                   type="text"
                   value={inputText}
-                  onChange={(e) => setInputText(e.target.value)}
-                  onKeyPress={handleKeyPress}
+                  onChange={handleInputChange}
+                  onKeyDown={handleKeyPress}
                   placeholder="Ask about health concerns..."
-                  className="flex-1 px-4 py-2 border border-gray-300 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="flex-1 px-4 py-2 border border-gray-300 rounded-full text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:opacity-50 disabled:cursor-not-allowed placeholder:text-gray-500"
                   disabled={isLoading}
+                  autoComplete="off"
+                  spellCheck={false}
                 />
                 <button
                   onClick={handleSendMessage}
                   disabled={!inputText.trim() || isLoading}
-                  className="w-10 h-10 bg-blue-500 hover:bg-blue-600 disabled:bg-gray-300 text-white rounded-full flex items-center justify-center transition-colors duration-200"
+                  className="w-10 h-10 bg-blue-500 hover:bg-blue-600 disabled:bg-gray-300 text-white rounded-full flex items-center justify-center transition-colors duration-200 disabled:cursor-not-allowed flex-shrink-0"
                 >
                   <Send size={16} />
                 </button>
